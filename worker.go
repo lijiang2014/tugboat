@@ -2,6 +2,7 @@ package tugboat
 
 import (
 	"context"
+	"fmt"
 )
 
 type SystemError struct{}
@@ -35,6 +36,10 @@ type Task struct {
 
 type Executor interface {
 	Exec(context.Context, *StagedTask, *Stdio) error
+}
+
+func (e *ExecError)Error() string {
+	return fmt.Sprintf("proccess exited with code %d.", e.ExitCode)
 }
 
 func Run(ctx context.Context, task *Task, stage *Stage, log Logger, store Storage, exec Executor) (err error) {

@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	tug "github.com/buchanae/tugboat"
+	tug "github.com/lijiang2014/tugboat"
 	"os/exec"
 	"strings"
 	"time"

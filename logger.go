@@ -30,6 +30,10 @@ type Logger interface {
 type EmptyLogger struct {
 }
 
+type StderrLogger struct {
+	EmptyLogger
+}
+
 func (e EmptyLogger) StartTime(t time.Time) {
 	fmt.Println("StartTime", t)
 }

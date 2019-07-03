@@ -3,9 +3,9 @@ package main
 import (
   "context"
   "fmt"
-  tug "github.com/buchanae/tugboat"
-  "github.com/buchanae/tugboat/docker"
-  "github.com/buchanae/tugboat/storage/local"
+  tug "github.com/lijiang2014/tugboat"
+  "github.com/lijiang2014/tugboat/docker"
+  "github.com/lijiang2014/tugboat/storage/local"
 )
 
 func main() {
