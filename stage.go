@@ -12,12 +12,25 @@ type StagedTask struct {
 	Inputs, Outputs       []File
 	Volumes               []string
 	Stdin, Stdout, Stderr string
+	State TaskState
 }
+
+type TaskState string
+
+const (
+	TaskRunning TaskState = "Running" // 运行中
+	TaskSuccess TaskState = "Success" // 成功结束
+	TaskFailed TaskState = "Failed" // 失败结束
+	TaskPlan TaskState = "Plan" // 尚未提交
+	TaskPending TaskState = "Pending" // 提交到了作业队列,在作业队列中排队
+	TaskUnknown TaskState = "Unknown"
+)
 
 func StageTask(parent *Stage, task *Task) (*StagedTask, error) {
 
 	// Create task-specific stage
-	st, err := NewStage(filepath.Join(parent.Dir, task.ID), parent.Mode)
+	//st, err := NewStage(filepath.Join(parent.Dir, task.ID), parent.Mode)
+	st, err := NewStage(parent.Dir, parent.Mode)
 	st.LeaveDir = parent.LeaveDir
 	if err != nil {
 		return nil, err
@@ -72,7 +85,8 @@ func StageTask(parent *Stage, task *Task) (*StagedTask, error) {
 }
 
 type Stage struct {
-	Dir      string
+	Dir      string // local real dir
+	RDir      string // for local run
 	Mode     os.FileMode
 	LeaveDir bool
 }

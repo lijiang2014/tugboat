@@ -1,7 +1,9 @@
 # convert a local job into Cluster job
 
-* -> docker job
-* -> slurm job
+tugboat forked from [github.com/buchanae/tugboat](https://github.com/buchanae/tugboat), which only have a docker Executor and  not updated any more. 
+
+* -> docker job ✅
+* -> slurm job 
 * -> k8s job
 * -> k8s deployment ?
 
@@ -200,10 +202,31 @@ type MPIRequirement struct {
 }
 ``` 
 
-存在 MPIRequirement 时， CMD 会根据 Mpirun 的 类似 对 CMD 进行再次包装，如针对 天河环境：
+存在 MPIRequirement 时， CMD 会根据 Mpirun 的 类似 对 CMD 进行再次包装，如针对 SLURM 环境：
 
 ```
 #!/bin/bash
 #SBATCH -N $(requirs.mpi.Nodes)
    srun -n $(requirs.mpi.cores) lammps
 ```
+
+# Features
+
+- [ ] localStorage + k
+
+
+# Tests
+
+- [x] lammps@local.docker
+- [x] lammps@local
+- [ ] lammps@slurm
+- [ ] lammps@slurm.mpi
+- [ ] lammps@local.docker.mpi
+- [x] lammps@k8s.job
+- [ ] tensorflow@local.docker
+- [ ] tensorflow@local
+- [ ] tensorflow@slurm
+- [ ] tensorflow@slurm.mpi
+- [ ] tensorflow@local.docker.mpi
+- [ ] tensorflow@k8s.job
+- [ ] tensorflow@k8s.deployment

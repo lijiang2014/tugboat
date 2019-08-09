@@ -36,6 +36,11 @@ type Task struct {
 
 type Executor interface {
 	Exec(context.Context, *StagedTask, *Stdio) error
+	Start(context.Context, *StagedTask, *Stdio) (RunningTaskController , error)
+	RecoverRunningTaskController(*StagedTask, string) (RunningTaskController , error)
+	//State(context.Context, *StagedTask, *Stdio, int) (error)
+	//Kill(context.Context, *StagedTask, *Stdio, int) ( error)
+	//Wait(context.Context, *StagedTask, *Stdio, int) ( error)
 }
 
 func (e *ExecError)Error() string {
@@ -97,5 +102,66 @@ func Run(ctx context.Context, task *Task, stage *Stage, log Logger, store Storag
 	log.Running()
 	try(exec.Exec(ctx, staged, stdio))
 
+	return
+}
+
+func Submit(ctx context.Context, task *Task, stage *Stage, log Logger, store Storage, exec Executor) (jobctr RunningTaskController, err error) {
+	
+	var me MultiError
+	try := me.Try
+	defer func() {
+		err = me.Finish()
+	}()
+	
+	info := log.Info
+	d := LogHelper{log}
+	d.Start()
+	defer d.Finish()
+	
+	
+	info("creating staging directory")
+	var staged *StagedTask
+	staged, err = StageTask(stage, task)
+	try(err)
+	if err != nil {
+		return
+	}
+	// Move 2 Clean ?
+	//defer func() {
+	//	try(staged.RemoveAll())
+	//}()
+	
+	err = Download(ctx, staged, store, log)
+	try(err)
+	if err != nil {
+		return
+	}
+	
+	// Move 2 Clean ?
+	//defer func() {
+	//	try(Upload(ctx, staged, store, log))
+	//}()
+	
+	var stdio *Stdio
+	stdio, err = DefaultStdio(staged, log)
+	try(err)
+	if err != nil {
+		return
+	}
+	
+	// Move 2 Clean ?
+	//defer func() {
+	//	try(stdio.Close())
+	//}()
+	//defer info("cleaning up")
+	
+	log.Running()
+	
+	//try(exec.Exec(ctx, staged, stdio))
+	jobctr, err = exec.Start(ctx,staged,stdio)
+	if try(err); err != nil {
+		return
+	}
+	
 	return
 }

@@ -41,3 +41,12 @@ func (me MultiError) Finish() error {
 	}
 	return nil
 }
+
+type NoSuchTask struct {
+	Uuid string
+	Id int
+}
+
+func (e NoSuchTask) Error() string {
+	return  fmt.Sprintf("Cannot found such task  [in memory]:%s:%d", e.Uuid, e.Id)
+}

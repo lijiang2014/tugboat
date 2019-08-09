@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
-  tug "github.com/buchanae/tugboat"
+  tug "github.com/lijiang2014/tugboat"
 )
 
 // Local provides access to a local-disk storage system.

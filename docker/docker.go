@@ -25,6 +25,8 @@ func (d *Docker) Exec(ctx context.Context, task *tug.StagedTask, stdio *tug.Stdi
 		}
 	}
 
+	//args := []string{"run", "-i", "--read-only"}
+	
 	args := []string{"run", "-i", "--read-only"}
 
 	if !d.LeaveContainer {
@@ -116,3 +118,24 @@ type ContainerMetadata struct {
 	Id    string
 	Image string
 }
+
+
+func (d *Docker) Start(ctx context.Context, task *tug.StagedTask, stdio *tug.Stdio) (jobctl tug.RunningTaskController, err error) {
+	return nil, nil
+}
+
+func (d *Docker) RecoverRunningTaskController(t *tug.StagedTask,index string) (tug.RunningTaskController , error) {
+	return nil, fmt.Errorf("Cannot recover local Docker controler")
+}
+
+//func (d *Docker) State(ctx context.Context, task *tug.StagedTask, stdio *tug.Stdio,jobid int) ( err error) {
+//	return nil
+//}
+//
+//func (d *Docker) Kill(ctx context.Context, task *tug.StagedTask, stdio *tug.Stdio,jobid int) ( err error) {
+//	return nil
+//}
+//
+//func (d *Docker) Wait(ctx context.Context, task *tug.StagedTask, stdio *tug.Stdio,jobid int) ( err error) {
+//	return nil
+//}

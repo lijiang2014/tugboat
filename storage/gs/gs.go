@@ -6,7 +6,7 @@ import (
 	"io"
 	"os"
 
-  tug "github.com/buchanae/tugboat"
+  tug "github.com/lijiang2014/tugboat"
   "cloud.google.com/go/storage"
 )
 
