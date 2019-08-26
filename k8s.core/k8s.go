@@ -374,7 +374,11 @@ func (d *K8sJob) Start(ctx context.Context, task *tug.StagedTask, stdio *tug.Std
   }
   commands := task.Command
   var partition string = d.RuntimeParams.Partition()
-  podLabelsSet := map[string]string{"app": d.AppName, "name": task.ID, "partition": partition}
+  var jobname string = d.RuntimeParams.JobName()
+  if jobname == "" {
+    jobname = d.AppName
+  }
+  podLabelsSet := map[string]string{"app": d.AppName, "name": task.ID, "partition": partition, "jobname": jobname}
   podSelector := map[string]string{"name": task.ID}
   var ttlSecondsAfterFinished int32 = 3600 * 24
   var ttlSecondsAfterFinishedPt = &ttlSecondsAfterFinished
